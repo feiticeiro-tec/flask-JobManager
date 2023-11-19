@@ -7,6 +7,8 @@ import os
 def listar_subpastas(diretorio):
     subpastas = [diretorio]
     for nome in os.listdir(diretorio):
+        if nome == "__pycache__":
+            continue
         caminho = os.path.join(diretorio, nome)
         if os.path.isdir(caminho):
             subpastas.append(caminho)
@@ -19,7 +21,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="flask-job_manager",
-    version="0.1.0",
+    version="0.1.1",
     url="https://github.com/feiticeiro-tec/feiticeiro-tec",
     license="BSD3",
     author="Silvio Henrique Cruz Da Silva",
@@ -29,5 +31,7 @@ setup(
     keywords="python, feiticeiro-tec, flask",
     description=("pacote de gerenciamento de jobs para flask"),
     packages=listar_subpastas("job_manager"),
+    package_data={"job_manager": ["templates/job_manager/*"]},
+    include_package_data=True,
     install_requires=["loguru"],
 )
