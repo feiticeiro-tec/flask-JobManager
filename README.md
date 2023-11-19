@@ -19,4 +19,35 @@ jm = JobManager()
 jm.init_app(app)
 ```
 
+## Como criar uma task
+
+```python
+
+# definição da tarefa
+def teste():
+    ...
+
+processo1 = jm.tasks.new(
+    "teste1",
+    teste,
+    group="Ola Mundo",
+    description="uma task de teste para visualização",
+)
+processo2 = jm.tasks.new(
+    "teste2",
+    teste,
+    description="uma task de teste para visualização",
+)
+processo3 = jm.tasks.new(
+    "teste3",
+    teste,
+    description="uma task de teste para visualização",
+)
+processo4 = jm.tasks.new(
+    "teste4",
+    teste,
+)
+
+```
+
 ## Tela de gerenciamento
