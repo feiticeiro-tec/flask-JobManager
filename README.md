@@ -50,5 +50,22 @@ processo4 = jm.tasks.new(
 
 ```
 
+## Declaração com parametros e decorador
+```python
+#decoração sem argumentos
+@job_manager.tasks.decorate()
+def ola_mundo():
+    """Função que imprime ola mundo"""
+    print("ola mundo")
+
+#declaração com argumentos
+@job_manager.tasks.decorate(kwargs={"texto": "ola"})
+def imprimir(texto):
+    print(texto)
+
+#chamada individual
+imprimir("ola mundo")
+```
+
 ## Tela de gerenciamento
 ![Captura de tela de 2023-11-18 21-18-13](https://github.com/feiticeiro-tec/flask-JobManager/assets/53744463/075de845-2621-4b35-8f5f-b03064e6ce18)
