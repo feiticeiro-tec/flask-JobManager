@@ -1,4 +1,5 @@
 from multiprocessing import Process
+from typing import Any
 from uuid import uuid4
 from loguru import logger
 from datetime import datetime
@@ -14,8 +15,12 @@ class Processo(Process):
         daemon=True,
         uuid=None,
         description="",
+        args=[],
+        kwargs={},
     ):
-        super().__init__(name=name, target=target, daemon=daemon)
+        super().__init__(
+            name=name, target=target, daemon=daemon, args=args, kwargs=kwargs
+        )
         self.uuid = None
         self.group = group
         self.target = target
@@ -27,10 +32,15 @@ class Processo(Process):
         self.last_run = None
         self.stoped = None
         self.description = description
+        self.args = args
+        self.kwargs = kwargs
 
     @property
     def is_running(self):
         return self.is_alive()
+
+    def __call__(self, *args: Any, **kwds: Any) -> Any:
+        return self.target(*args, **kwds)
 
     def heranca(self):
         return {
@@ -40,6 +50,8 @@ class Processo(Process):
             "daemon": self.daemon,
             "uuid": self.uuid,
             "description": self.description,
+            "args": self.args,
+            "kwargs": self.kwargs,
         }
 
     def __repr__(self) -> str:
@@ -79,6 +91,36 @@ class ManagerProcess:
         processo.start()
         return processo
 
+    def find_by_function(self, function):
+        for processo in self._get_all():
+            if processo.target == function:
+                return processo
+
+    def decorate(
+        self,
+        *args,
+        name=None,
+        group="decorador",
+        description="",
+        daemon=True,
+        uuid=None,
+        **kwargs,
+    ):
+        def wrapper(target):
+            processo = self.new(
+                name=name or target.__name__,
+                target=target,
+                group=group,
+                description=description or target.__doc__ or "",
+                daemon=daemon,
+                uuid=uuid,
+                *args,
+                **kwargs,
+            )
+            return processo
+
+        return wrapper
+
     def new(
         self,
         name,
@@ -87,6 +129,8 @@ class ManagerProcess:
         description="",
         daemon=True,
         uuid=None,
+        args=[],
+        kwargs={},
     ):
         processo = Processo(
             uuid=uuid,
@@ -95,6 +139,8 @@ class ManagerProcess:
             group=group,
             daemon=daemon,
             description=description,
+            args=args,
+            kwargs=kwargs,
         )
         self._add(processo, group)
         logger.success(f"{processo} Criado!")
