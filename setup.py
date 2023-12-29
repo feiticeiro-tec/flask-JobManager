@@ -21,8 +21,8 @@ with open("README.md", "r") as fh:
 
 setup(
     name="flask-job_manager",
-    version="0.1.1",
-    url="https://github.com/feiticeiro-tec/feiticeiro-tec",
+    version="0.2.0",
+    url="https://github.com/feiticeiro-tec/flask-JobManager",
     license="BSD3",
     author="Silvio Henrique Cruz Da Silva",
     long_description=readme,
