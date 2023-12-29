@@ -4,6 +4,7 @@ from uuid import uuid4
 from loguru import logger
 from datetime import datetime
 import time
+from typing import List
 
 
 class Processo(Process):
@@ -168,7 +169,7 @@ class ManagerProcess:
         while True:
             time.sleep(1)
 
-    def _get_all(self) -> list[Process]:
+    def _get_all(self) -> List[Process]:
         for grupo in self._storage.values():
             for processo in grupo:
                 yield processo
